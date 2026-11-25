@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Smart Concrete | Inspection Scan & Stage Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#07101c;--panel:#101d2d;--line:#25394d;--text:#edf5fc;--muted:#97adc1;--teal:#49d5d2;--orange:#ffab59;--blue:#6481ff;--green:#7de6b3}*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:var(--bg);color:var(--text)}button,select,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid #69dad6;outline-offset:3px}.app{min-height:100vh;display:grid;grid-template-columns:320px minmax(0,1fr)}aside{background:linear-gradient(175deg,#122439,#0d1726);border-right:1px solid var(--line);padding:24px;display:flex;flex-direction:column;gap:22px;z-index:2}header{display:flex;gap:12px;align-items:center}.mark{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#38d4d0,#4474dc);color:#061322;font-weight:900;font-size:23px}.eyebrow{font-size:10px;letter-spacing:2.2px;font-weight:800;color:#60c9ce}.brand{font-size:19px;font-weight:800;letter-spacing:-.55px;margin-top:4px}.subtitle{color:var(--muted);font-size:12px;line-height:1.6}.sectionlabel{font-size:11px;font-weight:800;letter-spacing:1.5px;color:#8da7bc;margin-bottom:10px}.seg{display:grid;grid-template-columns:1fr 1fr;gap:7px}.seg button,.smallbtn{border:1px solid #2a455e;background:#17283a;color:#bdcfe0;padding:11px;border-radius:9px;font-weight:700}.seg button.active,.smallbtn.active{background:#21505d;border-color:#48c6c3;color:white}.stages{display:flex;flex-direction:column;gap:8px}.step{display:flex;gap:11px;align-items:center;text-align:left;border:1px solid transparent;border-radius:11px;padding:12px;color:#b5c7d8;background:#132337;transition:.15s}.step:hover{background:#1b354b}.step.active{border-color:#46beb9;background:#174048;color:#fff}.num{display:grid;place-items:center;border:1px solid #425b70;border-radius:8px;width:29px;height:29px;flex:none;font-size:12px;font-weight:800}.step.active .num{background:#41bcb8;color:#071b24;border-color:#41bcb8}.step strong{display:block;font-size:12px;margin-bottom:3px}.step small{display:block;font-size:11px;opacity:.65}.metric{background:#0b1a29;border:1px solid #254057;border-radius:12px;padding:15px}.metric-top{display:flex;justify-content:space-between;align-items:baseline}.metric b{font-size:30px;letter-spacing:-1px}.metric span{font-size:11px;color:var(--muted)}input[type=range]{width:100%;accent-color:#4bcac7;margin:12px 0 4px}.line{display:flex;justify-content:space-between;align-items:center;gap:8px}.warning{font-size:11px;color:#ffca92}.selectors{display:flex;gap:7px}.selectors button{flex:1;padding:9px 2px;font-size:11px}.status{padding:12px;border:1px solid #284153;background:#102439;border-radius:10px;font-size:12px;line-height:1.7;color:#b9d4df}.status b{color:#d8f6f5}.foot{margin-top:auto;font-size:10px;line-height:1.7;color:#778ea2}.stagebox{min-width:0;display:flex;flex-direction:column;position:relative}.topbar{padding:19px 25px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;background:#0b1827}.main-title{font-size:16px;font-weight:800;letter-spacing:-.35px}.main-sub{font-size:11px;color:var(--muted);margin-top:5px}.tag{border:1px solid #28615e;border-radius:99px;padding:6px 10px;color:#7ddbd4;font-weight:800;font-size:10px;white-space:nowrap}.view{position:relative;flex:1;min-height:510px;overflow:hidden;background:radial-gradient(ellipse at 58% 46%,#1d3652 0%,#0a192b 50%,#07101c 92%)}canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}canvas:active{cursor:grabbing}.hint{position:absolute;left:22px;top:18px;padding:10px 12px;background:#091b2bbc;border:1px solid #31546a;border-radius:9px;color:#a9c6d6;font-size:11px;pointer-events:none}.view-controls{position:absolute;right:20px;top:18px;display:flex;gap:7px}.view-controls button{border:1px solid #31516b;background:#122c44df;color:#e9f2fb;border-radius:8px;padding:9px 11px;font-size:12px;font-weight:750}.legend{position:absolute;bottom:20px;left:23px;display:flex;flex-wrap:wrap;gap:13px;background:#091a2bd9;border:1px solid #2b4559;padding:11px 13px;border-radius:10px;font-size:10px;color:#c6d9e6;pointer-events:none}.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}.timeline{padding:18px 25px;border-top:1px solid var(--line);background:#0b1827}.playline{display:flex;gap:13px;align-items:center}.primary{background:#49c9c4;color:#08202a;border:0;border-radius:9px;font-weight:850;padding:11px 18px;white-space:nowrap}.primary:disabled{opacity:.4;cursor:not-allowed}.progress{flex:1;accent-color:#54ccc7}.time{font-size:12px;color:#b1c7d5;min-width:52px;text-align:right;font-variant-numeric:tabular-nums}.description{font-size:12px;color:#a8c1d2;line-height:1.6;margin-top:10px}.notify{position:absolute;left:50%;top:18px;transform:translateX(-50%);background:#133d45;border:1px solid #4ac9c0;border-radius:10px;padding:11px 16px;font-size:12px;display:none;z-index:3}.notify.show{display:block}@media(max-width:920px){.app{display:flex;flex-direction:column}aside{gap:16px;padding:18px}.stages{display:grid;grid-template-columns:repeat(5,minmax(112px,1fr));overflow-x:auto}.step{padding:9px;min-width:112px}.step small{display:none}.view{min-height:460px}.foot{display:none}}@media(max-width:600px){.topbar{padding:14px}.view{min-height:400px}.hint{font-size:10px;top:10px;left:10px}.view-controls{right:9px;top:9px}.legend{bottom:9px;left:9px;right:9px;font-size:9px;gap:8px}.timeline{padding:14px}.main-title{font-size:14px}}
+
+.section-inset{position:absolute;right:18px;bottom:76px;width:min(355px,calc(100% - 38px));z-index:4;padding:12px 12px 8px;border:1px solid #3b6077;border-radius:14px;background:linear-gradient(145deg,#142c40f2,#0b1b2df5);box-shadow:0 22px 55px #0008;display:none;backdrop-filter:blur(10px)}
+.section-inset.show{display:block}.section-inset svg{display:block;width:100%;height:auto}.section-inset-head{display:flex;align-items:center;justify-content:space-between;color:#e6f2fc;font-weight:800;font-size:12px;padding:0 5px 3px}.section-inset-head button{background:transparent;color:#b9d6e5;border:none;font-size:24px;cursor:pointer}.section-note{font-size:10px;text-align:center;color:#8eaab9;padding:0 0 6px}.view-controls{flex-wrap:wrap;justify-content:flex-end;max-width:400px}.view-controls button{white-space:nowrap}.hero-light{position:absolute;pointer-events:none;inset:0;background:radial-gradient(ellipse at 54% 35%,#7cd5ed0a,transparent 50%)}.topbar .tag{font-size:10px}
+@media(max-width:650px){.section-inset{right:8px;bottom:64px;width:min(315px,calc(100% - 16px))}.view-controls{right:8px;max-width:240px}.view-controls button{padding:7px 8px;font-size:10px}}
+
+.explain-card{margin-top:13px;border-top:1px solid #294457;padding-top:12px;display:grid;gap:5px}
+.explain-label{color:#65c8cb;font-size:10px;letter-spacing:.07em;font-weight:800}
+.explain-title{font-size:13px;color:#f0f8ff;font-weight:800}
+.explain-content{color:#b9cfdf;font-size:12px;line-height:1.65}
+.explain-subtitle{margin-top:5px}
+@media(min-width:921px){.timeline{padding-bottom:20px}}
+</style></head><body><div class="app">
+<aside><header><div class="mark">S</div><div><div class="eyebrow">STRUCTURAL ENGINEERING</div><div class="brand">SMART CONCRETE</div></div></header><div class="subtitle">습도 센서 · 동심 이중관 · 자동 토출구<br>스마트 콘크리트 · 작동 원리 인터랙티브 시각화</div>
+<section><div class="sectionlabel">모델 방향</div><div class="seg"><button id="vertical" class="active">↕ 세로형</button><button id="horizontal">↔ 가로형</button></div></section>
+<section><div class="sectionlabel">작동 단계</div><div class="stages" id="stages"></div></section>
+<section><div class="sectionlabel">가상 센서 측정값</div><div class="metric"><div class="metric-top"><b id="humidityValue">45%</b><span id="sensorState">정상 감시</span></div><input aria-label="습도 측정값 변경" type="range" id="humidity" min="0" max="100" value="45"><div class="line"><span class="warning">시연용 경고 기준 70%</span><span style="font-size:10px;color:#819eae">가상 입력</span></div></div></section>
+<section><div class="sectionlabel">보수할 균열 영역</div><div class="selectors"><button id="sideA" class="smallbtn active">좌측</button><button id="sideB" class="smallbtn active">우측</button><button id="sideBoth" class="smallbtn active">양쪽</button></div></section>
+<div class="status" id="status"><b>상태</b><br>균열과 누수가 없는 초기 상태입니다.</div>
+<div class="foot">교육·발표용 시각화입니다. 실제 습도 측정, 유체역학·구조 안전성·보수 성능 계산 기능은 포함되지 않습니다.<br>콘크리트 및 관 치수는 개념적 비율입니다.</div></aside>
+<main class="stagebox"><div class="topbar"><div><div class="main-title">관삽입형 스마트 콘크리트 · 발표용 시뮬레이션</div><div class="main-sub" id="viewCaption">세로형 | 상부 INLET → 하부 OUTLET</div></div><div class="tag">● INTERACTIVE SCAN DEMO</div></div><div class="view" id="viewport"><canvas id="scene"></canvas><div class="hero-light"></div><div class="hint">마우스로 드래그: 회전 · 휠: 확대/축소</div><div class="view-controls"><button id="resetCamera" title="카메라 위치 초기화">시점 초기화</button><button id="toggleConcrete">콘크리트 숨기기</button><button id="toggleSection">단면 확대</button></div><div class="notify" id="notify"></div><div class="section-inset" id="sectionInset" aria-label="동심 이중관 확대 단면">
+  <div class="section-inset-head"><span>동심 이중관 · 단면 확대</span><button id="closeSection" aria-label="단면 확대 닫기">×</button></div>
+  <svg viewBox="0 0 300 215" role="img" aria-label="강철관, 환형공간, 테프론관, 유체 통로와 습도 센서">
+    <defs><radialGradient id="steelGrad" cx="30%" cy="28%"><stop stop-color="#a3b0bb"/><stop offset="1" stop-color="#596a77"/></radialGradient><radialGradient id="ptfeGrad" cx="25%" cy="25%"><stop stop-color="#fffefa"/><stop offset="1" stop-color="#d8d7ca"/></radialGradient><radialGradient id="boreGrad"><stop stop-color="#173449"/><stop offset="1" stop-color="#092334"/></radialGradient></defs>
+    <circle cx="100" cy="104" r="83" fill="url(#steelGrad)" stroke="#b3bec7" stroke-width="2"/>
+    <circle cx="100" cy="104" r="68" fill="#bc9866" opacity=".8" stroke="#d6b883" stroke-width="2"/>
+    <circle cx="100" cy="104" r="54" fill="url(#ptfeGrad)" stroke="#fff8e3" stroke-width="2"/>
+    <circle cx="100" cy="104" r="38" fill="url(#boreGrad)" stroke="#85acbf" stroke-width="2"/>
+    <circle cx="100" cy="43" r="6" fill="#39dba9" stroke="#e5fff8" stroke-width="1.5"/>
+    <circle cx="157" cy="104" r="7" fill="#e8ae56" stroke="#fff3d4" stroke-width="1.5"/>
+    <path d="M162 104 H188 L205 94" fill="none" stroke="#f4b45f" stroke-width="5" stroke-linecap="round"/>
+    <g fill="none" stroke-width="1.3"><path d="M167 48 L191 29 H205" stroke="#b3bec7"/><path d="M150 65 L191 66 H205" stroke="#d5b883"/><path d="M147 146 L191 154 H205" stroke="#fff1cf"/><path d="M100 43 L179 186 H205" stroke="#40d7a6"/></g>
+    <g font-size="10" fill="#dcebf4" font-family="system-ui,sans-serif"><text x="208" y="30">외부 강철관</text><text x="208" y="69">환형 공간</text><text x="208" y="157">내부 PTFE관</text><text x="208" y="188">습도 센서</text><text x="100" y="108" text-anchor="middle" font-size="10" fill="#a9ddf4">유체 통로</text><text x="209" y="98" fill="#f4b45f">자동 개폐구</text></g>
+  </svg>
+  <div class="section-note">설명용 확대 단면 · 구조를 강조한 개념도</div>
+</div><div class="legend"><span><i style="background:#8193a6"></i>강철관</span><span><i style="background:#eee7d8"></i>PTFE관</span><span><i style="background:#43d9e0"></i>누수</span><span><i style="background:#ffa359"></i>보수재</span><span><i style="background:#526df2"></i>세척액</span></div></div><div class="timeline"><div class="playline"><button id="play" class="primary">▶ 단계 재생</button><input id="progress" class="progress" type="range" aria-label="애니메이션 진행도" min="0" max="100" value="0"><div id="time" class="time">0%</div></div><div id="description" class="description">정상 상태: 균열 없음 · 모든 토출구 닫힘 · 습도 센서 대기</div>
+<div class="explain-card" aria-live="polite">
+  <div class="explain-label">현재 단계에서 보는 내용</div>
+  <div class="explain-title" id="explainTitle">① 초기 정상 상태</div>
+  <div class="explain-content" id="explainObserve"></div>
+  <div class="explain-label explain-subtitle">장치의 반응과 의미</div>
+  <div class="explain-content" id="explainMeaning"></div>
+</div></div></main></div>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id), canvas=$('scene'),ctx=canvas.getContext('2d');
+const steps=[['NORMAL','정상 상태','균열 없음'],['WET CRACK','습식 균열','누수 · 센서 감지'],['INSPECTION','외부 점검','스캔 후 보수 영역 선택'],['INJECTION','보수재 주입','선택적 균열 충전'],['CLEANING','관 내부 세척','호스 · 수집 용기']];
+let state={orient:'vertical',stage:0,progress:0,playing:false,humidity:45,selection:'both',yaw:-0.68,pitch:0.28,zoom:1.0,concrete:true,doneInjection:false};
+let last=0,drag=null,cssW=1,cssH=1;let sectionOpen=false;
+const baseStatus=['균열과 누수가 없는 초기 상태입니다. 모든 토출구가 닫혀 있습니다.','외부 누수 지점에서 균열이 발생하고 습도가 상승합니다.','센서 경고를 확인한 뒤 균열 확인 카메라 센서로 균열을 확인한다. 이후 보수 영역을 선택합니다.','선택한 균열의 토출구만 열려 보수재가 유입됩니다.','토출구를 닫고 관 내부를 세척합니다. 세척액이 배출구에 도달한 뒤 호스를 지나 수집 용기에 차오릅니다.'];
+const desc=['정상 상태: 균열 없음 · 모든 토출구 닫힘 · 습도 센서 대기','외부 수분 침투 → 균열 생성·확장 → 습도 상승 → 센서 경고','센서 반응 확인 → 외부 점검 → 균열 확인 카메라 센서로 균열 확인 → 보수 대상 포트 선택','외부 INLET → 내부 PTFE관 → 선택된 포트 → 분기형 균열 → 잔여물 배출','세척액 유입 → 관 내부 잔여물 제거 → 외부 호스 → 수집 용기'];
+const stageNotes=[
+ ['① 초기 정상 상태',
+  '콘크리트에 균열과 누수가 없고, 내부 강철 보호관·PTFE관이 매립되어 있는 모습을 확인합니다.',
+  '습도 센서는 대기 상태이며 자동 토출구는 모두 닫혀 있습니다.'],
+ ['② 습식 균열 발생',
+  '외부 수분이 한 지점에서 침투해 균열이 퍼지고, 청록색으로 습윤 구역이 넓어지는 과정을 관찰합니다.',
+  '가상 습도값이 상승하면서 센서가 경고 상태로 전환됩니다. 경고 기준은 발표용 예시입니다.'],
+ ['③ 외부 점검 · 균열 스캔',
+  '콘크리트 외부에서 청록색 스캔선이 천천히 이동하며 내부 균열 구간을 훑습니다. 선택한 보수 영역의 균열이 더 밝게 강조됩니다.',
+  '균열 확인 카메라 센서로 균열을 확인한다. 스캔 결과를 바탕으로 보수가 필요한 토출구를 선택하는 과정을 표현합니다. 카메라 장치는 화면에 표시하지 않습니다.'],
+ ['④ 보수재 주입',
+  '외부 INLET에서 주황색 보수재가 PTFE관을 따라 이동하고, 선택된 토출구가 열리며 양쪽 분기형 균열로 보수재가 채워집니다.',
+  '점검에서 선택한 영역에 보수재를 전달하고, 선택하지 않은 균열은 충전되지 않은 상태로 남습니다.'],
+ ['⑤ 잔여 보수재 세척',
+  '토출구가 닫힌 상태에서 파란 세척액이 관 내부를 지나며 주황색 잔여물을 밀어내고, 외부 배출 호스를 거쳐 수집 용기에 쌓입니다.',
+  '균열에 충전된 보수재는 유지하고 관 내부 잔여물만 제거하는 세척 개념을 보여줍니다.']
+];
+$('stages').innerHTML=steps.map((s,i)=>`<button class="step${i===0?' active':''}" data-stage="${i}"><span class="num">${String(i+1).padStart(2,'0')}</span><span><strong>${s[0]}</strong><small>${s[1]}</small></span></button>`).join('');
+function notify(msg){$('notify').textContent=msg;$('notify').classList.add('show');setTimeout(()=>$('notify').classList.remove('show'),2400)}
+function updateUI(){document.querySelectorAll('.step').forEach((b,i)=>b.classList.toggle('active',i===state.stage));$('vertical').classList.toggle('active',state.orient==='vertical');$('horizontal').classList.toggle('active',state.orient==='horizontal');$('sideA').classList.toggle('active',state.selection==='a'||state.selection==='both');$('sideB').classList.toggle('active',state.selection==='b'||state.selection==='both');$('sideBoth').classList.toggle('active',state.selection==='both');$('viewCaption').textContent=state.orient==='vertical'?'세로형 | 상부 INLET → 하부 OUTLET':'가로형 | 왼쪽 INLET → 오른쪽 OUTLET';$('sideA').textContent=state.orient==='vertical'?'좌측':'상부';$('sideB').textContent=state.orient==='vertical'?'우측':'하부';$('humidityValue').textContent=Math.round(state.humidity)+'%';$('sensorState').textContent=state.humidity>=70?'보수 필요':'정상 감시';$('sensorState').style.color=state.humidity>=70?'#ffa978':'#72ddb1';$('status').innerHTML='<b>시스템 상태</b><br>'+baseStatus[state.stage];$('description').textContent=desc[state.stage];$('explainTitle').textContent=stageNotes[state.stage][0];$('explainObserve').textContent=stageNotes[state.stage][1];$('explainMeaning').textContent=stageNotes[state.stage][2];$('play').textContent=state.playing?'❚❚ 일시정지':'▶ 단계 재생';$('progress').value=state.progress;$('time').textContent=Math.round(state.progress)+'%';$('toggleConcrete').textContent=state.concrete?'콘크리트 숨기기':'콘크리트 보이기'}
+function chooseStage(i){state.playing=false;state.stage=i;state.progress=i===0?0:0;if(i===0){state.doneInjection=false;state.humidity=45;$('humidity').value=45}else if(i>=2){state.humidity=Math.max(82,state.humidity);$('humidity').value=state.humidity}updateUI();render()}
+document.querySelectorAll('.step').forEach(btn=>btn.onclick=()=>chooseStage(+btn.dataset.stage));
+$('vertical').onclick=()=>{state.orient='vertical';state.yaw=-0.68;state.pitch=.28;state.zoom=1;updateUI();render()};$('horizontal').onclick=()=>{state.orient='horizontal';state.yaw=-.68;state.pitch=.28;state.zoom=1;updateUI();render()};
+$('humidity').oninput=e=>{state.humidity=+e.target.value;updateUI();render()};
+for(let [id,val] of [['sideA','a'],['sideB','b'],['sideBoth','both']])$(id).onclick=()=>{state.selection=val;updateUI();render()};
+$('toggleSection').onclick=()=>{sectionOpen=!sectionOpen;$('sectionInset').classList.toggle('show',sectionOpen)};$('closeSection').onclick=()=>{$('sectionInset').classList.remove('show');sectionOpen=false};$('resetCamera').onclick=()=>{state.yaw=-.68;state.pitch=.28;state.zoom=1;render()};$('toggleConcrete').onclick=()=>{state.concrete=!state.concrete;updateUI();render()};
+$('play').onclick=()=>{if(state.stage===0){chooseStage(1)}if(state.stage===4&&!state.doneInjection){notify('주입 단계부터 실행하면 균열 충전 상태가 유지됩니다.')}state.playing=!state.playing;updateUI()};
+$('progress').oninput=e=>{state.progress=+e.target.value;state.playing=false;updateUI();render()};
+canvas.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw:state.yaw,pitch:state.pitch};canvas.setPointerCapture(e.pointerId)});canvas.addEventListener('pointermove',e=>{if(!drag)return;state.yaw=drag.yaw+(e.clientX-drag.x)*.006;state.pitch=Math.max(-1.15,Math.min(1.15,drag.pitch+(e.clientY-drag.y)*.005));render()});canvas.addEventListener('pointerup',()=>drag=null);canvas.addEventListener('pointercancel',()=>drag=null);canvas.addEventListener('wheel',e=>{e.preventDefault();state.zoom=Math.max(.55,Math.min(2.7,state.zoom*Math.exp(-e.deltaY*.001)));render()},{passive:false});
+function resize(){const r=canvas.getBoundingClientRect();cssW=r.width;cssH=r.height;const dpr=Math.min(2,window.devicePixelRatio||1);canvas.width=Math.max(1,Math.round(cssW*dpr));canvas.height=Math.max(1,Math.round(cssH*dpr));ctx.setTransform(dpr,0,0,dpr,0,0);render()}window.addEventListener('resize',resize);
+const V=(x,y,z)=>[x,y,z];
+function mapV(p){return state.orient==='vertical'?p:[p[2],p[1],p[0]]} // local axis = z ; horizontal axis = x
+function project(p){p=mapV(p);let[x,y,z]=p;const cy=Math.cos(state.yaw),sy=Math.sin(state.yaw),cp=Math.cos(state.pitch),sp=Math.sin(state.pitch);let X=cy*x-sy*y,Y=sy*x+cy*y;let Z=cp*z-sp*Y;let depth=sp*z+cp*Y;const scale=Math.min(cssW/430,cssH/400)*state.zoom;return {x:cssW*.53+X*scale,y:cssH*.52-Z*scale,d:depth}}
+function line3(points,color,width=2,alpha=1,dash=null){if(points.length<2)return;ctx.beginPath();points.forEach((p,i)=>{let q=project(p);i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y)});ctx.strokeStyle=color;ctx.globalAlpha=alpha;ctx.lineWidth=width;ctx.lineJoin='round';ctx.lineCap='round';ctx.setLineDash(dash||[]);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1}
+function poly3(points,fill,stroke=null,alpha=1){const q=points.map(project);ctx.beginPath();q.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.globalAlpha=alpha;ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke()}ctx.globalAlpha=1}
+function text3(p,text,color='#dfedff',size=11,align='center'){const q=project(p);ctx.font=`700 ${size}px system-ui,sans-serif`;ctx.textAlign=align;ctx.fillStyle=color;ctx.shadowColor='#04101c';ctx.shadowBlur=6;ctx.fillText(text,q.x,q.y);ctx.shadowBlur=0}
+function orb(p,r,col){const q=project(p);const scale=Math.max(.55,Math.min(2,state.zoom));ctx.beginPath();ctx.arc(q.x,q.y,r*scale,0,Math.PI*2);ctx.fillStyle=col;ctx.fill()}
+function cube(x,y,z,fill,stroke='#67849a',alpha=.4){const c=[V(-x,-y,-z),V(x,-y,-z),V(x,y,-z),V(-x,y,-z),V(-x,-y,z),V(x,-y,z),V(x,y,z),V(-x,y,z)];let faces=[[0,1,2,3],[0,1,5,4],[1,2,6,5],[2,3,7,6],[3,0,4,7],[4,5,6,7]];faces=faces.map(f=>({f,d:f.reduce((a,k)=>a+project(c[k]).d,0)/4})).sort((a,b)=>a.d-b.d);for(let a of faces)poly3(a.f.map(k=>c[k]),fill,stroke,alpha)}
+// Local cylinder axis z; shaded silhouette using an offset ring sampled in x,y.
+function ring(z,rad,color,width=2,alpha=1){let pts=[];for(let i=0;i<=42;i++){let a=i*Math.PI*2/42;pts.push(V(rad*Math.cos(a),rad*Math.sin(a),z))}line3(pts,color,width,alpha)}
+function wall(rad,lo,hi,color,alpha=1){const n=32;const quads=[];for(let i=0;i<n;i++){const a=i*2*Math.PI/n,b=(i+1)*2*Math.PI/n;let points=[V(rad*Math.cos(a),rad*Math.sin(a),lo),V(rad*Math.cos(a),rad*Math.sin(a),hi),V(rad*Math.cos(b),rad*Math.sin(b),hi),V(rad*Math.cos(b),rad*Math.sin(b),lo)];let depth=points.reduce((s,p)=>s+project(p).d,0)/4;quads.push({points,depth})}quads.sort((a,b)=>a.depth-b.depth).forEach(o=>poly3(o.points,color,null,alpha));ring(lo,rad,'#8a9bac',1.2,.8);ring(hi,rad,'#a3b7c4',1.2,.8)}
+function cableCurve(points,col,width=5){line3(points,col,width,.95);line3(points,'#9cbed0',1.0,.6)}
+const portT=[-69,-34,0,34,69];
+function crackLines(side,t){const s=side;let center=V(18*s,0,t);let a=V(29*s,0,t+2),b=V(39*s,0,t+1),c=V(48*s,-10,t+11),d=V(49*s,11,t-9),e=V(61*s,-14,t+15),f=V(61*s,15,t-15),g=V(70*s,-23,t+6),h=V(69*s,22,t-8);return [[center,a],[a,b],[b,c],[b,d],[c,e],[d,f],[c,g],[d,h]]}
+function allCracks(){let arr=[];for(const s of [-1,1])for(let j=0;j<5;j++){const t=portT[j];const paths=crackLines(s,t);paths.forEach((pts,k)=>arr.push({s,j,k,pts,dist:Math.abs(t-34)+k*8}))}return arr}
+const cracks=allCracks();
+function drawConcrete(){if(!state.concrete)return;cube(78,75,95,'#97b7c9','#7097b8',.10)}
+function drawConnectors(){// upstream inlet outside specimen, outlet and flexible discharge hose to collector
+const R=state.orient==='vertical';
+wall(10,-120,-95,'#8e9baa',.95);wall(10,95,120,'#8e9baa',.95);
+ring(-120,6.5,'#f0e8d8',3.2);ring(120,6.5,'#f0e8d8',3.2);
+const flowStart=V(0,0,136),flowEnd=V(0,0,-136);
+// Labels are fixed to endpoints, not camera aligned to the pipe mesh.
+text3(flowStart,R?'INLET  ↓':'INLET  →','#ffb86e',13);text3(flowEnd,R?'OUTLET  ↓':'OUTLET  →','#a6c1ff',12);
+let hose=[V(0,0,-122),V(0,-5,-137),V(14,-17,-146),V(34,-20,-149),V(43,-23,-160)];cableCurve(hose,'#4b657b',7);
+const tank=V(45,-23,-169);const mid=project(tank);ctx.save();ctx.translate(mid.x,mid.y);let sc=Math.min(cssW/430,cssH/400)*state.zoom;let w=30*sc,h=37*sc;ctx.strokeStyle='#82b3cd';ctx.lineWidth=2;ctx.fillStyle='#4c769049';ctx.fillRect(-w/2,-h*.55,w,h);ctx.strokeRect(-w/2,-h*.55,w,h);const filled=state.stage===4?Math.max(0,Math.min(1,(state.progress/100-.86)/.14)):0;const fillgrad=ctx.createLinearGradient(0,h*.45-(h-4)*filled,0,h*.45);fillgrad.addColorStop(0,'#74bdff');fillgrad.addColorStop(1,'#184eda');ctx.fillStyle=fillgrad;ctx.fillRect(-w/2+2,h*.45-(h-4)*filled,w-4,(h-4)*filled);if(filled>0){ctx.strokeStyle='#b5dcff';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(-w/2+2,h*.45-(h-4)*filled);ctx.quadraticCurveTo(0,h*.45-(h-4)*filled-2,w/2-2,h*.45-(h-4)*filled);ctx.stroke()};ctx.restore();text3(V(45,-23,-194),'COLLECTION','#94b2c9',10);
+if(state.stage===4){
+ const p=state.progress/100, f=Math.max(0,Math.min(1,(p-.72)/.14));
+ for(let i=0;i<hose.length-1;i++){
+   const remaining=f*(hose.length-1)-i;
+   if(remaining>0)drawFluidRibbon(hose[i],hose[i+1],remaining,'#3171e9','#a9d8ff',5.4,p*21+i)
+ }
+}
+}
+function drawTube(){wall(13,-104,104,'#778491',.88);wall(9,-104,104,'#f1e9db',.86);wall(6.0,-105,105,'#20384a',.28);
+line3([V(12.5,-1,-102),V(12.5,-1,102)],'#b3c2ce',2,.8);
+line3([V(8.7,-1,-102),V(8.7,-1,102)],'#fffdf2',1.8,.75);ring(104,13,'#a2b3bf',2.5);ring(104,9,'#f8f0df',3);ring(104,6,'#152e45',2);ring(-104,13,'#a2b3bf',2.5);ring(-104,9,'#f8f0df',3);ring(-104,6,'#152e45',2);
+for(let i=0;i<3;i++){let t=[-58,0,58][i];let alarm=state.stage>=1&&(state.progress>70||state.stage>=2)&&state.humidity>=70;orb(V(10,0,t),4,alarm?'#f77965':'#67e4aa')}
+}
+function selectedSide(side){
+  if(state.selection==='both')return true;
+  // Vertical: local -X is left. Horizontal swaps local X into global Z;
+  // local +X is therefore the upper crack group on screen.
+  const group=state.orient==='vertical'?(side<0?'a':'b'):(side>0?'a':'b');
+  return state.selection===group;
+}
+function drawGates(){
+  // Small sliding shutters: they open only after the descending resin front
+  // reaches the corresponding port. No rod extends out of the concrete.
+  const progress=state.stage===3?state.progress/100:0;
+  const front=110-progress*225;
+  for(const side of [-1,1])for(const z of portT){
+    const arrived=state.stage===3&&selectedSide(side)&&front<=z;
+    // The shutter slides a short distance parallel to the pipe, not radially outward.
+    const opening=arrived?Math.max(0,Math.min(1,(z-front)/12)):0;
+    const smooth=opening*opening*(3-2*opening);
+    const gateX=side*17;
+    // Fixed steel seat, visible as a compact dark opening.
+    line3([V(side*13.5,0,z-3.5),V(side*20,0,z-3.5)],'#425566',2.8,.92);
+    line3([V(side*13.5,0,z+3.5),V(side*20,0,z+3.5)],'#425566',2.8,.92);
+    // A short golden shutter slides upward by only 6 mm.
+    const shutterZ=z+smooth*6.2;
+    line3([V(gateX,-2.8,shutterZ),V(gateX,2.8,shutterZ)],'#e9c28a',4.5,.98);
+    orb(V(gateX,0,shutterZ),1.65,'#f2d4a5');
+    // Exposed internal-to-external resin passage (only after opening).
+    if(smooth>.08){
+      line3([V(side*10.2,0,z),V(side*18,0,z)],'#e58d3d',1.6+1.8*smooth,.9*smooth);
+    }
+  }
+}
+function drawCracks(){if(state.stage===0)return;const p=state.progress/100;for(const cr of cracks){let [s,j,k,pts]=[cr.s,cr.j,cr.k,cr.pts];const order=j*8+k;const reveal=state.stage===1?p*80:80; if(order>reveal)continue; const selected=selectedSide(s);let color=state.stage===1?(p>.35?'#46d7dc':'#657886'):(state.stage>=2?'#55cfd1':'#617789');if(state.stage===2){
+  const proximity=1-Math.min(1,Math.abs(cr.pts[0][2]-(82-164*scanPosition()))/24);
+  color=selected?(proximity>.05?'#b3fff1':'#69dfd6'):'#425867';
+}if(state.stage>=3){
+ const reached=(110-state.progress*2.25)<portT[j];
+ const filled=selected&&reached&&state.progress>(j*6+k*2+12);
+ color=state.stage===4?(selected?'#e79850':'#627d8e'):selected?'#55cfd1':'#627d8e';
+}if(state.stage===2){
+ const proximity=1-Math.min(1,Math.abs(pts[0][2]-(82-164*scanPosition()))/24);
+ if(selected&&proximity>.04)line3(pts,'#75eee4',5.2,.12+proximity*.27);
+ line3(pts,color,selected?3.2:1.45,selected?.93:.34)
+}else line3(pts,color,selected?3:2.2,.9)}}
+function drawLeak(){if(state.stage!==1&&state.stage!==2)return;const p=state.stage===2?1:state.progress/100;let tip=V(55,-23,94);if(p>.08){line3([V(64,-26,103),V(61,-25,100),tip],'#45d9e1',4,.92);line3([V(61,-25,96),V(57,-24,94),V(51,-20,89)],'#55dfea',3,.85)}if(p>.3){let x=project(V(60,-20,81));ctx.save();ctx.strokeStyle='#46d9df';ctx.globalAlpha=.14;ctx.lineWidth=10;ctx.beginPath();ctx.arc(x.x,x.y,16+p*23,0,Math.PI*2);ctx.stroke();ctx.restore()}}
+function drawLiquidColumn(lo,hi,r,primary,shine,phase){
+  // A solid-looking liquid volume with a moving meniscus, surface shimmer
+  // and specular streaks. Artistic visualization: no CFD is performed.
+  if(hi<=lo)return;
+  let n=40,faces=[];
+  for(let i=0;i<n;i++){
+    const a=i*Math.PI*2/n,b=(i+1)*Math.PI*2/n;
+    const edgeA=1.8*Math.sin(a*2+phase),edgeB=1.8*Math.sin(b*2+phase);
+    const pa=V(r*Math.cos(a),r*Math.sin(a),lo),pb=V(r*Math.cos(b),r*Math.sin(b),lo);
+    const qa=V(r*Math.cos(a),r*Math.sin(a),hi+edgeA),qb=V(r*Math.cos(b),r*Math.sin(b),hi+edgeB);
+    const depth=(project(pa).d+project(pb).d+project(qa).d+project(qb).d)/4;
+    faces.push({points:[pa,pb,qb,qa],depth,light:.42+.58*Math.max(0,Math.sin(a+state.yaw*.7))});
+  }
+  faces.sort((x,y)=>x.depth-y.depth);
+  for(let f of faces){poly3(f.points,f.light>.67?shine:primary,null,f.light>.67?.86:.77)}
+  let cap=[];for(let i=0;i<=44;i++){const a=i*Math.PI*2/44;cap.push(V(r*Math.cos(a),r*Math.sin(a),hi+1.8*Math.sin(a*2+phase)))}
+  line3(cap,shine,2.6,.93);
+  for(let j=0;j<4;j++){
+    let t=(j/4+phase*.012)%1,z=lo+5+t*(hi-lo-10);
+    if(z>lo+5&&z<hi-5)line3([V(r*.90,-r*.2,z),V(r*.90,-r*.2,Math.max(lo+1,z-9))],shine,1.1,.37)
+  }
+}
+function linePartial(a,b,f,color,width){
+  const h=Math.max(0,Math.min(1,f));
+  if(h<=0)return;
+  const q=V(a[0]+(b[0]-a[0])*h,a[1]+(b[1]-a[1])*h,a[2]+(b[2]-a[2])*h);
+  line3([a,q],color,width,.96)
+}
+function drawFluidRibbon(a,b,f,liquid,highlight,width=5,phase=0){
+  f=Math.max(0,Math.min(1,f));if(f<=0)return;
+  const p=project(a),q=project(b);let dx=q.x-p.x,dy=q.y-p.y;
+  let len=Math.hypot(dx,dy)||1,nx=-dy/len,ny=dx/len;
+  const endX=p.x+dx*f,endY=p.y+dy*f;
+  ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+  const g=ctx.createLinearGradient(p.x,p.y,endX,endY);
+  g.addColorStop(0,liquid);g.addColorStop(.72,liquid);g.addColorStop(1,highlight);
+  ctx.beginPath();ctx.moveTo(p.x,p.y);
+  for(let j=1;j<=22;j++){
+    const t=f*j/22,wobble=Math.sin(t*27+phase*3)*Math.min(1.3,len*.012)*t;
+    ctx.lineTo(p.x+dx*t+nx*wobble,p.y+dy*t+ny*wobble)
+  }
+  ctx.strokeStyle=g;ctx.lineWidth=width;ctx.shadowBlur=7;ctx.shadowColor=liquid+'80';ctx.stroke();ctx.shadowBlur=0;
+  ctx.beginPath();ctx.moveTo(p.x+nx*1.0,p.y+ny*1.0);ctx.lineTo(endX+nx*1.0,endY+ny*1.0);
+  ctx.lineWidth=Math.max(.8,width*.18);ctx.strokeStyle=highlight;ctx.globalAlpha=.78;ctx.stroke();ctx.restore()
+}
+function scanPosition(){
+  // Smooth acceleration/deceleration, zero-to-one from stage progress.
+  const t=Math.max(0,Math.min(1,state.progress/100));
+  return t*t*(3-2*t);
+}
+function drawInspectionScan(){
+  if(state.stage!==2)return;
+  const t=scanPosition(), z=82-164*t; // vertical top-to-bottom; horizontal left-to-right in mapped view
+  const x=79;
+  const frontY=-58,backY=58;
+  // A slim translucent light sheet, not a physical camera model.
+  poly3([V(x,frontY,z-5),V(x,backY,z-5),V(x,backY,z+5),V(x,frontY,z+5)],'#40e6e0',null,.055);
+  line3([V(x,frontY,z),V(x,backY,z)],'#66ede5',2.0,.92);
+  line3([V(x-5,frontY,z),V(x-5,backY,z)],'#58d2d5',.8,.38);
+  // Short visual glints show which detected crack areas are selected.
+  for(const side of [-1,1]){
+    const selected=selectedSide(side);
+    for(let j=0;j<5;j++){
+      const mz=portT[j],distance=Math.abs(mz-z);
+      if(distance<19){
+        const strength=(1-distance/19);
+        const center=V(side*22,0,mz);
+        const c=project(center);
+        ctx.save();ctx.globalAlpha=selected?.22*strength:.05*strength;
+        ctx.strokeStyle=selected?'#aefff5':'#5c95a5';
+        ctx.lineWidth=selected?3.0:1.2;
+        ctx.beginPath();ctx.arc(c.x,c.y,(8+5*strength)*state.zoom,0,Math.PI*2);ctx.stroke();ctx.restore();
+      }
+    }
+  }
+}
+function drawFlow(){
+  if(state.stage!==3&&state.stage!==4)return;
+  const p=state.progress/100, cleaning=state.stage===4;
+  const head=110-(cleaning?Math.min(1,p/.72):p)*225;
+  if(cleaning){
+    drawLiquidColumn(Math.max(-105,head),105,5.4,'#2453d1','#7db7ff',p*23);
+    const residue=[75,47,15,-17,-48,-78];
+    for(let i=0;i<residue.length;i++){
+      const z=residue[i];if(head>z){
+        line3([V(2.2,-1,z-6),V(2.2,-1,z+6)],'#db792c',4,.93);
+        line3([V(3,-1,z-5),V(3,-1,z+1)],'#ffc68a',1,.8)
+      }
+    }
+  }else{
+    drawLiquidColumn(Math.max(-105,head),105,5.4,'#c96020','#ffc17c',p*23);
+    const selected=s=>selectedSide(s);
+    for(const side of [-1,1])if(selected(side))for(let j=0;j<5;j++){
+      const z=portT[j],arrived=(z-head)/35;
+      if(arrived<=0)continue;
+      const f=Math.max(0,Math.min(1,arrived));
+      drawFluidRibbon(V(side*6,0,z),V(side*18,0,z),f,'#e87e29','#ffd18e',5.5,p*25);
+      const paths=crackLines(side,z);
+      for(let k=0;k<paths.length;k++){
+        const local=Math.max(0,Math.min(1,(arrived*1.8-k*.17)*1.5));
+        if(local>0)drawFluidRibbon(paths[k][0],paths[k][1],local,'#e98734','#ffcc86',4.8,p*24+k)
+      }
+    }
+  }
+}
+function render(){if(!cssW)return;ctx.clearRect(0,0,cssW,cssH);const grad=ctx.createRadialGradient(cssW*.55,cssH*.43,20,cssW*.55,cssH*.55,cssW*.68);grad.addColorStop(0,'#19304a');grad.addColorStop(1,'#081320');ctx.fillStyle=grad;ctx.fillRect(0,0,cssW,cssH);
+// The canvas draws a three-dimensional *projection* with orbit/zoom interaction;
+// no physical CFD and no polygon-accurate hidden-surface removal is implied.
+drawConcrete();drawTube();drawLeak();drawInspectionScan();drawCracks();drawFlow();drawGates();drawConnectors();
+ctx.fillStyle='#8ca5b8';ctx.font='11px system-ui';ctx.textAlign='left';ctx.fillText(state.orient==='vertical'?'VERTICAL CONFIGURATION':'HORIZONTAL CONFIGURATION',19,cssH-17)
+}
+function animate(ts){const dt=Math.min(80,ts-last||16);last=ts;if(state.playing){state.progress=Math.min(100,state.progress+dt*(state.stage===2?.010:.018));if(state.stage===1){state.humidity=45+state.progress*.37;$('humidity').value=state.humidity}if(state.stage===3&&state.progress>=100)state.doneInjection=true;if(state.progress>=100){state.playing=false;notify('단계 재생이 완료되었습니다.')}updateUI();render()}requestAnimationFrame(animate)}
+updateUI();resize();requestAnimationFrame(animate);
+})();
+</script></body></html>
