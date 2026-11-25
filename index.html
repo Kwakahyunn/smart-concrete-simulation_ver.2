@@ -17,37 +17,87 @@
 .phase-card strong{color:#9cf4dd}
 .sim-hud{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:11px;margin:8px 0;color:#b5cedf}
 @media(max-width:780px){.workflow{grid-template-columns:repeat(2,minmax(0,1fr))}.env-grid{grid-template-columns:1fr 1fr}}
-</style></head><body><div class="app"><header class="top"><div><div class="eyebrow">CREATIVE ENGINEERING · VIRTUAL EXPERIMENT</div><h1>Smart Concrete <span style="color:#72dfd8">Experimental Simulation</span></h1><div class="sub">PTFE / PVC 실제 시험체 조건 기반 비교 · 가상 예측 · 측정값 검증</div></div><div class="tabs"><button class="active" id="tabExperiment">실험 재현 모드</button><button id="tabSystem">스마트 보수 시스템 시연</button></div></header><section id="experimental"><div class="disclaimer">ⓘ <b>가정 기반 예측 모델입니다.</b> 관·시험체 치수는 제공받은 실험 조건을 사용하지만, 보수재 점도·실제 주입 압력·균열 체적·토출 손실 계수는 측정되지 않았습니다. 따라서 <b>이동 시간·잔류량·균열 유입량은 실제 측정값이 아닌 가상 예측값</b>입니다. 실제 실험값을 입력하면 예측 오차를 별도로 계산합니다.</div><div class="workflow" id="workflow">
+
+.env-grid select{display:block;margin-top:5px;width:100%;padding:8px;border:1px solid #365669;border-radius:8px;color:#e8f4fb;background:#081825}
+.weather-credit a{color:#88dcd2}.weather-btn{padding:9px;margin:8px 0}
+.env-day{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:9px 0;color:#9bc0cc;font-size:10px}
+.env-day .weathercell{border:1px solid #2d5061;border-radius:7px;padding:7px 3px;background:#0c1e2c;line-height:1.55;text-align:center}
+.env-day .weathercell.active{border-color:#6ee3d1;background:#174550;color:#fff}
+.day-panel{border:1px solid #396477;background:#102d3a;border-radius:12px;padding:15px;margin-top:13px}
+.day-heading,.day-summary,.day-controls{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.day-heading strong{color:#d8f8ec}.day-heading span{color:#91b9c6;font-size:12px}
+.day-progress{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:13px 0}
+.day-dot{min-height:51px;border-radius:8px;border:1px solid #305568;color:#81a7b8;background:#0d202d;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;transition:background .2s,border-color .2s}
+.day-dot.done{border-color:#6bb8a7;background:#215153;color:#e3fffa}.day-dot.active{box-shadow:0 0 0 2px #7ef5df inset}
+.day-summary{font-size:12px;color:#aacece;margin:9px 0}.day-summary strong{color:#bfeee2}
+.day-panel input[type=range]{width:100%;accent-color:#76e7d0}.day-controls button{width:calc(50% - 6px)}
+@media(max-width:620px){.env-day{grid-template-columns:repeat(4,1fr)}.day-dot{min-height:44px}}
+</style></head><body><div class="app"><header class="top"><div><div class="eyebrow">CREATIVE ENGINEERING · VIRTUAL EXPERIMENT</div><h1>Smart Concrete <span style="color:#72dfd8">Experimental Simulation</span></h1><div class="sub">PTFE / PVC 실제 시험체 조건 · 실험 절차 재현 · PTFE/PVC 예측·실측 비교</div></div><div class="tabs"><button class="active" id="tabExperiment">실험 재현 모드</button><button id="tabSystem">스마트 보수 시스템 시연</button></div></header><section id="experimental"><div class="workflow" id="workflow">
 <button data-phase="mold" class="active"><em>01 · 제작</em><b>관 매립·균열 형성</b></button>
 <button data-phase="cure1"><em>02 · 약 7일</em><b>1차 콘크리트 양생</b></button>
-<button data-phase="inject"><em>03 · 주사기</em><b>보수재 주입 실험</b></button>
+<button data-phase="inject"><em>03 · 자동 주입</em><b>보수재 주입 실험</b></button>
 <button data-phase="cure2"><em>04 · 약 7일</em><b>2차 보수재 경화 관찰</b></button>
 <button data-phase="compare"><em>05 · 분석</em><b>실측·예측 비교</b></button>
 </div>
 <div class="workflow-note" id="workflowNote">① 실험체 준비: 관을 중앙에 고정하고 양측 분기형 인공 균열을 만든 뒤 모르타르/콘크리트를 타설합니다.</div>
-<div class="layout"><aside class="panel"><h2>01 · 실험 조건 설정</h2><span class="tag">PTFE · PVC 동일 조건 비교</span><div class="control"><label>관 재질 선택</label><div class="choices"><button class="pill active" data-mat="ptfe">PTFE</button><button class="pill" data-mat="pvc">PVC</button></div></div><div class="spec"><div><span>시험체</span><strong>190 × 90 × 57</strong><span>mm</span></div><div><span>관 길이</span><strong>200</strong><span>mm</span></div><div><span>토출구</span><strong>6개</strong><span>양쪽 각 3개</span></div></div><div class="control"><label>관 내경 / 외경</label><div id="diameter" class="muted">9.5 / 12.7 mm</div></div><div class="control"><label>주입량 (mL)<strong id="volumeLabel">30 mL</strong></label><input id="volume" type="range" min="20" max="50" step="1" value="30"><div class="small">추천 초기 조건: 30 mL, 한 번의 연속 주사기 주입</div></div><div class="control"><label>주입 소요 시간 (초)<strong id="durationLabel">60초</strong></label><input id="duration" type="range" min="30" max="120" step="5" value="60"><div class="small">손으로 천천히 주입. 실험 시 타이머로 측정한 실제 시간을 입력</div></div><div class="control"><label>주입 방식</label><div class="muted">주사기 · 한 번에 연속 주입 · 보수재: 파란 식용색소 + 글리세린 수용액 + 에폭시 혼합</div></div><div class="divider"></div><h3>야외 실험 환경 기록</h3>
-<div class="small">실제 야외 온도·상대습도 및 강우 여부를 기록해 PTFE/PVC 시험을 가능한 동일한 환경에서 비교합니다. 아래 값은 <b>기록란</b>이며 예측 계산에 자동 반영되지는 않습니다.</div>
-<div class="env-grid"><label>외기 온도 (°C)<input id="tempOutdoor" type="number" step="0.1" placeholder="실측 입력"></label><label>상대습도 (%)<input id="rhOutdoor" type="number" min="0" max="100" step="1" placeholder="실측 입력"></label><label>날씨<input id="weatherOutdoor" placeholder="예: 흐림 / 비 없음"></label></div>
-<div class="small">1차 양생과 2차 경화 중 노출 조건(차광·덮개·강우·온습도)은 별도로 기록하세요. 표기된 약 7일은 <b>실험 계획 기간</b>이며 강도 또는 경화 완료 판정이 아닙니다.</div>
-<div class="divider"></div><h3>실험체 배치</h3><div class="small">관: 시험체 중앙 매립<br>균열: 관 기준 위/아래 각 3개, 양쪽 분기형<br>토출구: 좌우 동일 간격 3쌍(총 6개)<br>관 길이 200 mm → 시험체 길이 190 mm보다 10 mm 김</div><div class="note">관 규격과 길이가 변경되어 예전의 1 mL 조건은 사용하지 않습니다. 두 관을 동일한 30 mL 조건으로 실험해 비교할 것을 제안합니다.</div><details><summary>실제 실험 사진 확인</summary><p>실제 실험 사진은 기존 제출 자료에 있으며, 이 배포본에서는 개인 실험 사진을 별도로 포함하지 않았습니다.</p><p>제공받은 실험 사진입니다. 실제 시험체는 내부를 확인하기 위해 절단했지만 웹 애니메이션은 절단하지 않은 하나의 블록으로 단순화했습니다.</p></details><button class="btn primary" id="play">▶ 가상 실험 시작</button><button class="btn" id="reset">↺ 진행 초기화</button></aside><section class="panel"><div class="illushead"><h2 style="margin:0">02 · 실험체 / 보수재 이동</h2><span id="phase" class="tag">주입 대기</span></div><div class="illustration"><svg id="experimentSvg" class="model-svg" viewBox="0 0 840 480" aria-label="콘크리트 시험체 중앙에 매립된 PTFE 또는 PVC 튜브, 양방향 토출구 6개 및 분기형 균열 보수재 충전 애니메이션"><defs><linearGradient id="conc" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#c9c1ae"/><stop offset=".48" stop-color="#a19e90"/><stop offset="1" stop-color="#7c827f"/></linearGradient><linearGradient id="tube" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#faf7ee"/><stop offset=".3" stop-color="#c5d1d0"/><stop offset=".85" stop-color="#7b969e"/><stop offset="1" stop-color="#e9eee7"/></linearGradient><linearGradient id="liquid" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#9fe8ff"/><stop offset=".6" stop-color="#42a8df"/><stop offset="1" stop-color="#165389"/></linearGradient><clipPath id="tubeclip"><rect x="50" y="225" width="740" height="30" rx="15"/></clipPath></defs><rect width="840" height="480" fill="#8ab6c8" opacity=".16"/><path d="M0 385Q160 376 305 396T650 388T840 399V480H0Z" fill="#536b54" opacity=".27"/><path d="M0 415Q180 400 340 421T840 412" stroke="#acc39c" stroke-width="4" opacity=".25" fill="none"/>
-<rect x="70" y="66" width="700" height="348" rx="8" fill="url(#conc)" stroke="#d8d3c7" stroke-width="3"/><g opacity=".12" stroke="#464944"><path d="M92 95l30 26 25 -12m70 253 40 -18 15 15m385 -196 28 11m-13 160 32 -18m-405-220 22 18" stroke-width="4"/></g><g id="crackBackground"></g><rect x="50" y="225" width="740" height="30" rx="15" fill="url(#tube)" stroke="#6c8796" stroke-width="2"/><rect x="51" y="235" width="738" height="10" rx="5" fill="#1b4a64" opacity=".95"/><g clip-path="url(#tubeclip)"><rect id="fillBody" x="50" y="235" width="0" height="10" rx="4" fill="url(#liquid)"/><path id="meniscus" d="" stroke="#d2f9ff" stroke-width="2" fill="none"/></g><g id="portMarks"></g><g id="crackFill"></g><text x="58" y="211" style="fill:#e7f3f5">INLET →</text><text x="703" y="211" style="fill:#e7f3f5">→ OUTLET</text><text x="76" y="45" style="fill:#9db7c8">시험체: 190 × 90 × 57 mm · 중앙 매립</text><text x="75" y="445" style="fill:#9db7c8" id="svgtube">PTFE 9.5 × 12.7 mm · 200 mm</text><text x="770" y="445" text-anchor="end" style="fill:#9db7c8">동일 간격 3쌍 / 총 6개</text><g id="syringeIllustration" aria-label="수동 주사기 모델">
+<div class="layout"><aside class="panel"><h2>01 · 실험 조건 설정</h2><span class="tag">PTFE · PVC 동일 조건 비교</span><div class="control"><label>관 재질 선택</label><div class="choices"><button class="pill active" data-mat="ptfe">PTFE</button><button class="pill" data-mat="pvc">PVC</button></div></div><div class="spec"><div><span>시험체</span><strong>190 × 90 × 57</strong><span>mm</span></div><div><span>관 길이</span><strong>200</strong><span>mm</span></div><div><span>토출구</span><strong>6개</strong><span>양쪽 각 3개</span></div></div><div class="control"><label>관 내경 / 외경</label><div id="diameter" class="muted">9.5 / 12.7 mm</div></div><div class="control"><label>주입량 (mL)<strong id="volumeLabel">30 mL</strong></label><input id="volume" type="range" min="20" max="50" step="1" value="30"><div class="small">추천 초기 조건: 30 mL, 연속 자동 주입</div></div><div class="control"><label>주입 소요 시간 (초)<strong id="durationLabel">60초</strong></label><input id="duration" type="range" min="30" max="120" step="5" value="60"><div class="small">자동 주입 속도 설정용 시간 · 실제 실험 소요시간과 비교 가능</div></div><div class="control"><label>주입 방식</label><div class="muted">자동 주사기 펌프 모형 · 일정한 속도로 연속 주입 · 보수재: 파란 식용색소 + 글리세린 수용액 + 에폭시 혼합</div></div><div class="divider"></div><h3>야외 실험 환경 기록</h3>
+<div class="small">실험 장소와 날짜를 선택하면 기상 자료를 자동으로 불러옵니다. 일별 값은 해당 지역의 기상 격자자료입니다.</div>
+<div class="env-grid" style="grid-template-columns:1fr 1fr"><label>실험 장소<select id="siteCity"><option value="bucheon">부천</option><option value="incheon">인천</option><option value="seoul">서울</option><option value="cheongju">청주</option><option value="suwon">수원</option><option value="daejeon">대전</option><option value="busan">부산</option><option value="daegu">대구</option><option value="gwangju">광주</option><option value="custom">직접 입력 (좌표)</option></select></label><label>1차 양생 시작 날짜<input id="startDate" type="date" value="2026-11-01"></label></div>
+<div id="coordinates" class="env-grid" style="display:none;grid-template-columns:1fr 1fr"><label>위도<input id="siteLat" type="number" step="0.0001" value="37.5034"></label><label>경도<input id="siteLon" type="number" step="0.0001" value="126.7660"></label></div>
+<button id="fetchWeather" class="btn weather-btn" type="button">☁ 날짜별 날씨 자동 불러오기</button>
+<div id="weatherStatus" class="small" role="status">조회 대기 · 과거 날짜는 인터넷 연결 시 확인할 수 있습니다.</div>
+<div class="env-grid"><label>일평균 기온 (°C)<input id="tempOutdoor" type="number" step="0.1" placeholder="—"></label><label>일평균 습도 (%)<input id="rhOutdoor" type="number" min="0" max="100" step="1" placeholder="—"></label><label>강수량 (mm)<input id="rainOutdoor" type="number" step="0.1" placeholder="—"></label></div>
+<div class="env-day" id="weatherDays">날짜와 지역을 선택해 조회해 주세요.</div>
+<div class="small weather-credit">날씨 자료: <a href="https://open-meteo.com/en/docs/historical-weather-api" target="_blank" rel="noopener">Open-Meteo Historical Weather</a> · 기상 관측소 현장 실측값과 다를 수 있습니다.</div>
+
+<div class="divider"></div><h3>실험체 배치</h3><div class="small">관: 시험체 중앙 매립<br>균열: 관 기준 위/아래 각 3개, 양쪽 분기형<br>토출구: 좌우 동일 간격 3쌍(총 6개)<br>관 길이 200 mm → 시험체 길이 190 mm보다 10 mm 김</div><div class="note">관 규격과 길이가 변경되어 예전의 1 mL 조건은 사용하지 않습니다. 두 관을 동일한 30 mL 조건으로 실험해 비교할 것을 제안합니다.</div><details><summary>실제 실험 사진 확인</summary><p>실제 실험 사진은 기존 제출 자료에 있으며, 이 배포본에서는 개인 실험 사진을 별도로 포함하지 않았습니다.</p><p>제공받은 실험 사진입니다. 실제 시험체는 내부를 확인하기 위해 절단했지만 웹 애니메이션은 절단하지 않은 하나의 블록으로 단순화했습니다.</p></details><button class="btn primary" id="play">▶ 단계 재생</button><button class="btn" id="reset">↺ 진행 초기화</button></aside><section class="panel"><div class="illushead"><h2 style="margin:0">02 · 실험체 / 보수재 이동</h2><span id="phase" class="tag">주입 대기</span></div><div class="illustration"><svg id="experimentSvg" class="model-svg" viewBox="0 0 840 480" aria-label="콘크리트 시험체 중앙에 매립된 PTFE 또는 PVC 튜브, 양방향 토출구 6개 및 분기형 균열 보수재 충전 애니메이션"><defs><linearGradient id="conc" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#c9c1ae"/><stop offset=".48" stop-color="#a19e90"/><stop offset="1" stop-color="#7c827f"/></linearGradient><linearGradient id="tube" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#faf7ee"/><stop offset=".3" stop-color="#c5d1d0"/><stop offset=".85" stop-color="#7b969e"/><stop offset="1" stop-color="#e9eee7"/></linearGradient><linearGradient id="liquid" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#9fe8ff"/><stop offset=".6" stop-color="#42a8df"/><stop offset="1" stop-color="#165389"/></linearGradient><clipPath id="tubeclip"><rect x="50" y="225" width="740" height="30" rx="15"/></clipPath></defs><rect width="840" height="480" fill="#8ab6c8" opacity=".16"/><path d="M0 385Q160 376 305 396T650 388T840 399V480H0Z" fill="#536b54" opacity=".27"/><path d="M0 415Q180 400 340 421T840 412" stroke="#acc39c" stroke-width="4" opacity=".25" fill="none"/>
+<rect x="70" y="66" width="700" height="348" rx="8" fill="url(#conc)" stroke="#d8d3c7" stroke-width="3"/><g opacity=".12" stroke="#464944"><path d="M92 95l30 26 25 -12m70 253 40 -18 15 15m385 -196 28 11m-13 160 32 -18m-405-220 22 18" stroke-width="4"/></g><g id="cureSurface" opacity="0"><rect id="cureFilm" x="70" y="66" width="700" height="348" rx="8" fill="#d2c7ac" opacity=".15"/><g id="surfaceSpecks" fill="#e1d6bd" opacity=".5"><circle cx="180" cy="120" r="4"/><circle cx="330" cy="350" r="3"/><circle cx="645" cy="160" r="5"/><circle cx="550" cy="330" r="3"/></g></g><g id="crackBackground"></g><rect x="50" y="225" width="740" height="30" rx="15" fill="url(#tube)" stroke="#6c8796" stroke-width="2"/><rect x="51" y="235" width="738" height="10" rx="5" fill="#1b4a64" opacity=".95"/><g clip-path="url(#tubeclip)"><rect id="fillBody" x="50" y="235" width="0" height="10" rx="4" fill="url(#liquid)"/><path id="meniscus" d="" stroke="#d2f9ff" stroke-width="2" fill="none"/></g><g id="portMarks"></g><g id="crackFill"></g><g id="resinFinish" opacity="0"><g id="resinOverlays"></g></g><text x="58" y="211" style="fill:#e7f3f5">INLET →</text><text x="703" y="211" style="fill:#e7f3f5">→ OUTLET</text><text x="76" y="45" style="fill:#9db7c8">시험체: 190 × 90 × 57 mm · 중앙 매립</text><text x="75" y="445" style="fill:#9db7c8" id="svgtube">PTFE 9.5 × 12.7 mm · 200 mm</text><text x="770" y="445" text-anchor="end" style="fill:#9db7c8">동일 간격 3쌍 / 총 6개</text><g id="syringeIllustration" aria-label="자동 주사기 펌프 모델">
 <rect x="0" y="227" width="45" height="26" rx="4" fill="#bcd2dc" opacity=".6" stroke="#eaf7ff"/>
 <rect x="8" y="231" width="34" height="18" rx="2" fill="#5eb9ee" opacity=".82"/>
 <line x1="45" y1="240" x2="56" y2="240" stroke="#d3eaf6" stroke-width="5"/>
 <line id="plunger" x1="-2" y1="240" x2="10" y2="240" stroke="#dae8ef" stroke-width="7"/>
-</g><g id="receiverIllustration" aria-label="출구 배출량 수집 용기"><path d="M794 265L794 328Q794 337 805 337H830Q836 337 836 328V265" stroke="#b4e6fb" fill="#254e65" fill-opacity=".38" stroke-width="3"/><rect id="vesselFill" x="796" y="335" width="37" height="0" fill="#3ea6e3" opacity=".86"/><text x="800" y="357" style="font-size:9px">배출</text></g></svg><div class="legend"><span><i class="dot" style="background:#45a9ea"></i>보수재</span><span><i class="dot" style="background:#53606a"></i>균열</span><span><i class="dot" style="background:#efebdd"></i>관</span><span><i class="dot" style="background:#5ad8dd"></i>유출 측정 지점</span></div></div><div class="phase-card" id="phaseCard"><strong>① 실험체 준비</strong><div id="phaseDetails">실험체 치수 190 × 90 × 57 mm, 중앙 관 삽입, 좌우 각 3개 분기형 균열을 형성합니다.</div></div><div class="sim-hud"><span id="frontReadout">보수재 선단: 주입구 대기</span><span id="outletReadout">배출: 시작 전</span></div><div class="progress"><div class="progress-meta"><span>가상 실험 진행</span><span id="clock" class="live">0.0 / 90.0초</span></div><input type="range" id="timeline" min="0" max="90" step="0.2" value="0"></div><div class="spec" style="margin-top:12px"><div><span>관 내부 기하학적 용적</span><strong id="tubeVol">14.18 mL</strong></div><div><span>첫 측면 토출 예상</span><strong id="firstTime">—</strong></div><div><span>OUTLET 도달 예상</span><strong id="outTime">—</strong></div></div><div class="obs"><b>실험 과정 해설</b><p id="stageDesc">주사기에서 한 번에 보수재를 주입하는 과정을 시작합니다. 6개 토출구는 관 중앙을 기준으로 위·아래 3개씩 배치되어 있습니다.</p></div><details><summary>예측 계산에 사용한 가정 보기</summary><p>이 시뮬레이터는 CFD가 아닌 가정 기반 부피수지 모델입니다. 관 내부 용적은 원통의 내경과 길이로 계산합니다. 균열로 전달되는 비율과 관 잔류 비율은 관 재질별 예시 계수를 사용하며, 나머지 보수재가 출구에서 배출된다고 가정합니다. 첫 토출/출구 도달 시간도 관 용적과 주입속도에 기반한 가상 추정값입니다. 실제 점도·균열 체적·주입압력에 따라 결과는 크게 달라질 수 있습니다.</p></details></section><aside class="panel results"><h2>03 · 예측 결과 / 실험값 비교</h2><div class="results-inner"><div><div class="stats"><div class="stat"><span>총 주입량 (설정)</span><b id="injStat">30.00 mL</b></div><div class="stat orange"><span>균열 유입량 (추정)</span><b id="crackStat">—</b></div><div class="stat"><span>관 출구 배출량 (추정)</span><b id="outStat">—</b></div><div class="stat cyan"><span>관 내부 잔류량 (추정)</span><b id="resStat">—</b></div></div><h3>주입량 분배 · 추정값</h3><div class="mass"><div id="barCrack" style="background:#f0a65d"></div><div id="barOut" style="background:#69a6e5"></div><div id="barResid" style="background:#7e909f"></div></div><div class="caption" id="massCaption">합계 100% · 균열 유입 / 출구 배출 / 관 내부 잔류</div><h3>관 종류별 예측 비교</h3><table class="compare"><thead><tr><th>항목</th><th>PTFE</th><th>PVC</th></tr></thead><tbody id="comparison"></tbody></table><div class="note">약 7일의 1·2차 양생은 실험 진행 절차이며, 실제 경화 여부는 시험·관찰로 검증해야 합니다. 관 재질별 효율 차이는 실험에서 관찰한 <b>상대적인 경향</b>을 반영한 가정으로, 측정된 성능 계수가 아닙니다. 현재 수치는 실험 결과로 사용하면 안 됩니다.</div></div><div><h3>실제 측정 결과 입력</h3><div class="small">실험을 마친 뒤 선택한 관의 측정값을 입력하면 예측값 대비 오차를 계산합니다. 비어 있는 항목은 미측정으로 표시합니다.</div><div class="fieldrows" style="margin-top:10px"><label>첫 측면 토출 시간 (초)<input type="number" id="actualFirst" min="0" step="0.1" placeholder="미측정"></label><label>OUTLET 도달 시간 (초)<input type="number" id="actualOutlet" min="0" step="0.1" placeholder="미측정"></label><label>균열 유입량 (mL)<input type="number" id="actualCrack" min="0" step="0.01" placeholder="미측정"></label><label>출구 배출량 (mL)<input type="number" id="actualOut" min="0" step="0.01" placeholder="미측정"></label><label>관 잔류량 (mL)<input type="number" id="actualResid" min="0" step="0.01" placeholder="미측정"></label><label>실제 주입 소요 (초)<input type="number" id="actualDuration" min="0" step="0.1" placeholder="미측정"></label></div><button id="saveResults" class="btn">측정값 저장 (현재 브라우저)</button><div id="errors" class="result-error">실제 측정값을 입력하면 상대오차가 나타납니다.</div><button id="exportCSV" class="btn">↓ PTFE·PVC 비교 CSV 다운로드</button><div class="foot">실험값 입력은 브라우저에 임시 저장됩니다. 발표 전 CSV 파일로 백업하세요. 데이터가 없으면 정확한 오차를 산출할 수 없습니다.</div></div></div></aside></div></section><section id="system" class="disabled"><div class="disclaimer">기존 스마트 콘크리트 시스템 시연 모드입니다. 습도 센서 반응 → 외부 균열 스캔 → 선택적 보수재 주입 → 관 내부 세척을 설명하는 <b>개념 시각화</b>이며 실제 콘크리트 실험과 별도로 구분합니다.</div><iframe class="system-frame" title="기존 스마트 보수 시스템 5단계 시연" id="systemFrame" loading="lazy" src="system-demo.html"></iframe></section></div>
+<g id="pumpMotor" aria-label="자동 주입 구동부" opacity=".95">
+<rect x="-36" y="211" width="45" height="16" rx="4" fill="#55768c" stroke="#b8daec" stroke-width="1.4"/>
+<rect x="-31" y="214" width="19" height="10" rx="2" fill="#29485c"/>
+<circle id="pumpLight" cx="0" cy="219" r="3.3" fill="#56e1b2"/>
+<path d="M 4 229 V 236" stroke="#b9d6e5" stroke-width="3"/>
+<text x="-33" y="206" style="font-size:10px;fill:#b5edff;font-weight:700">AUTO</text>
+</g>
+</g><g id="receiverIllustration" aria-label="출구 배출량 수집 용기"><path d="M794 265L794 328Q794 337 805 337H830Q836 337 836 328V265" stroke="#b4e6fb" fill="#254e65" fill-opacity=".38" stroke-width="3"/><rect id="vesselFill" x="796" y="335" width="37" height="0" fill="#3ea6e3" opacity=".86"/><text x="800" y="357" style="font-size:9px">배출</text></g></svg><div class="legend"><span><i class="dot" style="background:#45a9ea"></i>보수재</span><span><i class="dot" style="background:#53606a"></i>균열</span><span><i class="dot" style="background:#efebdd"></i>관</span><span><i class="dot" style="background:#5ad8dd"></i>유출 측정 지점</span></div></div><div class="day-panel disabled" id="dayPanel">
+  <div class="day-heading"><strong id="dayHeading">1차 양생 · 1일차</strong><span id="dayDate">—</span></div>
+  <div class="day-progress" id="dayProgress"></div>
+  <div class="day-summary"><span id="dayCondition">날씨 조회 후 일별 기상 자료 표시</span><strong id="dayEffect">실험체 상태 관찰</strong></div>
+  <input id="daySlider" type="range" min="1" max="7" step="1" value="1" aria-label="경과 일수 선택">
+  <div class="day-controls"><button id="prevDay" class="pill">← 이전 날</button><button id="nextDay" class="pill">다음 날 →</button></div>
+</div>
+<div class="phase-card" id="phaseCard"><strong>① 실험체 준비</strong><div id="phaseDetails">실험체 치수 190 × 90 × 57 mm, 중앙 관 삽입, 좌우 각 3개 분기형 균열을 형성합니다.</div></div><div class="sim-hud"><span id="frontReadout">보수재 선단: 주입구 대기</span><span id="outletReadout">배출: 시작 전</span></div><div class="progress" id="injectionProgress"><div class="progress-meta"><span>자동 주사기 펌프 · 경과 시간</span><span id="clock" class="live">0.0 / 90.0초</span></div><input type="range" id="timeline" min="0" max="90" step="0.2" value="0"></div><div class="spec" style="margin-top:12px"><div><span>관 내부 기하학적 용적</span><strong id="tubeVol">14.18 mL</strong></div><div><span>첫 측면 토출 예상</span><strong id="firstTime">—</strong></div><div><span>OUTLET 도달 예상</span><strong id="outTime">—</strong></div></div><div class="obs"><b>실험 과정 해설</b><p id="stageDesc">자동 주사기 펌프가 보수재를 일정 속도로 연속 주입합니다. 6개 토출구는 관 중앙을 기준으로 위·아래 3개씩 배치되어 있습니다.</p></div></section><aside class="panel results"><h2>03 · 예측값 / 실제 측정값 비교</h2><div class="results-inner"><div><div class="stats"><div class="stat"><span>총 주입량 (설정)</span><b id="injStat">30.00 mL</b></div><div class="stat orange"><span>균열 유입량 (추정)</span><b id="crackStat">—</b></div><div class="stat"><span>관 출구 배출량 (추정)</span><b id="outStat">—</b></div><div class="stat cyan"><span>관 내부 잔류량 (추정)</span><b id="resStat">—</b></div></div><h3>주입량 분배 · 추정값</h3><div class="mass"><div id="barCrack" style="background:#f0a65d"></div><div id="barOut" style="background:#69a6e5"></div><div id="barResid" style="background:#7e909f"></div></div><div class="caption" id="massCaption">합계 100% · 균열 유입 / 출구 배출 / 관 내부 잔류</div><h3>관 종류별 예측 비교</h3><table class="compare"><thead><tr><th>항목</th><th>PTFE</th><th>PVC</th></tr></thead><tbody id="comparison"></tbody></table></div><div><h3>실제 측정 결과 입력</h3><div class="small">실측값을 입력하면 예측값과의 오차를 비교할 수 있습니다.</div><div class="fieldrows" style="margin-top:10px"><label>첫 측면 토출 시간 (초)<input type="number" id="actualFirst" min="0" step="0.1" placeholder="미측정"></label><label>OUTLET 도달 시간 (초)<input type="number" id="actualOutlet" min="0" step="0.1" placeholder="미측정"></label><label>균열 유입량 (mL)<input type="number" id="actualCrack" min="0" step="0.01" placeholder="미측정"></label><label>출구 배출량 (mL)<input type="number" id="actualOut" min="0" step="0.01" placeholder="미측정"></label><label>관 잔류량 (mL)<input type="number" id="actualResid" min="0" step="0.01" placeholder="미측정"></label><label>실제 주입 소요 (초)<input type="number" id="actualDuration" min="0" step="0.1" placeholder="미측정"></label></div><button id="saveResults" class="btn">측정값 저장 (현재 브라우저)</button><div id="errors" class="result-error">실제 측정값을 입력하면 상대오차가 나타납니다.</div><button id="exportCSV" class="btn">↓ PTFE·PVC 비교 CSV 다운로드</button></div></div></aside></div></section><section id="system" class="disabled"><div class="disclaimer">기존 스마트 콘크리트 시스템 시연 모드입니다. 습도 센서 반응 → 외부 균열 스캔 → 선택적 보수재 주입 → 관 내부 세척을 설명하는 <b>개념 시각화</b>이며 실제 콘크리트 실험과 별도로 구분합니다.</div><iframe class="system-frame" title="기존 스마트 보수 시스템 5단계 시연" id="systemFrame" loading="lazy" src="system-demo.html"></iframe></section></div>
 <script>
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
 const materials={ptfe:{label:'PTFE',id:9.5,od:12.7,crackFraction:.66,residualFraction:.05,delay:0},pvc:{label:'PVC',id:10,od:12,crackFraction:.58,residualFraction:.12,delay:5}};
 const ports=[{x:245,side:-1},{x:245,side:1},{x:420,side:-1},{x:420,side:1},{x:595,side:-1},{x:595,side:1}];
 let current='ptfe',progress=0,playing=false,loopLast=0;let actual={ptfe:{},pvc:{}};
-let experimentPhase='inject';
+let experimentPhase='inject',dayNumber=1,weatherList=[],weatherDayOffset=0,phasePlayback=false;
+const locations={bucheon:[37.5034,126.7660],incheon:[37.4563,126.7052],seoul:[37.5665,126.9780],cheongju:[36.6424,127.4890],suwon:[37.2636,127.0286],daejeon:[36.3504,127.3845],busan:[35.1796,129.0756],daegu:[35.8714,128.6014],gwangju:[35.1595,126.8526]};
+const two=n=>String(n).padStart(2,'0');
+function dateAdd(d,n){const x=new Date(d+'T12:00:00+09:00');x.setUTCDate(x.getUTCDate()+n);return `${x.getUTCFullYear()}-${two(x.getUTCMonth()+1)}-${two(x.getUTCDate())}`;}
+function currentDayIndex(){return (experimentPhase==='cure2'?7:0)+(dayNumber-1)}
+function setWeatherFields(d){$('tempOutdoor').value=d&&Number.isFinite(d.temp)?d.temp:'';$('rhOutdoor').value=d&&Number.isFinite(d.rh)?Math.round(d.rh):'';$('rainOutdoor').value=d&&Number.isFinite(d.rain)?d.rain:'';}
+function weatherLabel(code){if(code==null)return '자료 없음';if(code===0)return '맑음';if(code<=3)return '구름';if(code<=48)return '안개';if(code<=67)return '비';if(code<=77)return '눈';if(code<=82)return '소나기';if(code<=86)return '눈';if(code>=95)return '뇌우';return '흐림';}
+function renderWeatherDays(){const start=currentDayIndex()>=7?7:0;$('weatherDays').innerHTML=Array.from({length:7},(_,i)=>{const d=weatherList[start+i],date=dateAdd($('startDate').value,start+i),active=dayNumber===i+1&&['cure1','cure2'].includes(experimentPhase);return `<div class="weathercell ${active?'active':''}"><b>${date.slice(5)}</b><br>${d&&d.temp!==null?d.temp+'°':'—'}<br>${d&&d.rain!==null?d.rain+'mm':'—'}</div>`}).join('');}
+async function fetchWeather(){const city=$('siteCity').value,custom=city==='custom',loc=custom?[Number($('siteLat').value),Number($('siteLon').value)]:locations[city];const start=$('startDate').value;if(!start||!loc||loc.some(n=>!Number.isFinite(n))){$('weatherStatus').textContent='장소·날짜를 확인해 주세요.';return;}const end=dateAdd(start,13);const today=new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Seoul'});if(end>today){$('weatherStatus').textContent='14일의 날짜 중 미래가 포함되어 있습니다. 과거 날짜로 선택하거나 조회 가능한 기간만 사용해 주세요.';return;} $('weatherStatus').textContent='날씨 자료 조회 중…';$('fetchWeather').disabled=true;
+ try{const qs=new URLSearchParams({latitude:String(loc[0]),longitude:String(loc[1]),start_date:start,end_date:end,timezone:'Asia/Seoul',daily:'temperature_2m_mean,relative_humidity_2m_mean,precipitation_sum,weather_code'});const res=await fetch('https://archive-api.open-meteo.com/v1/archive?'+qs.toString());if(!res.ok)throw new Error('HTTP '+res.status);const data=await res.json();if(!data.daily||!Array.isArray(data.daily.time))throw new Error('일별 자료 없음');weatherList=data.daily.time.map((date,i)=>({date,temp:data.daily.temperature_2m_mean?.[i]??null,rh:data.daily.relative_humidity_2m_mean?.[i]??null,rain:data.daily.precipitation_sum?.[i]??null,code:data.daily.weather_code?.[i]??null}));$('weatherStatus').textContent=`${weatherList.length}일간 자료 조회 완료 · Open-Meteo 과거 기상 격자자료`;renderDay();}catch(e){$('weatherStatus').textContent='조회 실패: '+e.message+' · 날짜/인터넷 연결을 확인해 주세요.';weatherList=[];renderDay();}finally{$('fetchWeather').disabled=false;}}
+function renderDay(){const cured=experimentPhase==='cure1'||experimentPhase==='cure2';$('dayPanel').classList.toggle('disabled',!cured);$('injectionProgress').classList.toggle('disabled',experimentPhase!=='inject');$('daySlider').value=dayNumber;$('dayHeading').textContent=(experimentPhase==='cure2'?'2차 보수재 경화':'1차 콘크리트 양생')+` · ${dayNumber}일차`;
+const offset=currentDayIndex(),date=dateAdd($('startDate').value,offset);$('dayDate').textContent=date;const d=weatherList[offset];$('dayCondition').textContent=d?`${weatherLabel(d.code)} · ${d.temp??'—'}°C · 습도 ${d.rh??'—'}% · 강수 ${d.rain??'—'}mm`:'해당 날짜의 기상 자료 조회 전';$('dayEffect').textContent=experimentPhase==='cure2'?'보수재 표면 변화 관찰':'모르타르 표면 변화 관찰';$('dayProgress').innerHTML=Array.from({length:7},(_,i)=>`<div class="day-dot ${i<dayNumber?'done':''} ${i+1===dayNumber?'active':''}"><b>${i+1}일</b><span>${i<dayNumber?'●':'○'}</span></div>`).join('');setWeatherFields(d);renderWeatherDays();
+// Day-specific visual change is illustrative; never computed concrete strength.
+$('cureSurface').setAttribute('opacity',experimentPhase==='cure1'?String(.25+dayNumber/7*.6):'0');$('cureFilm').setAttribute('opacity',String(.15+dayNumber/7*.14));$('resinFinish').setAttribute('opacity',experimentPhase==='cure2'?String(dayNumber/7*.4):'0');
+}
+
 const phaseData={
  mold:['① 실험체 제작','관을 콘크리트 시험체 중앙에 배치하고, 관 양쪽에 3개씩 인공 분기형 균열 경로를 형성합니다. 실제 제작할 때는 몰탈 타설 전 관과 균열 형성재를 고정합니다.','제작 단계 · 0일'],
- cure1:['② 1차 양생 · 계획 약 7일','관과 균열 경로가 포함된 시험체를 야외 조건에서 약 7일 양생합니다. 기온·습도·비·덮개 등 양생 환경을 기록합니다. 7일 경과 자체가 충분한 강도 확보의 증거는 아닙니다.','1차 양생 · 약 7일'],
- inject:['③ 보수재 주입 · 실험 시간','30 mL 주사기를 한 번에 연속 주입합니다. 보수재 선단이 각 토출구에 도달한 뒤에만 해당 균열이 채워집니다. 양쪽 관에 동일 조건을 사용합니다.','주입 · 0~90초'],
- cure2:['④ 2차 경화 관찰 · 계획 약 7일','주입 종료 후 야외에서 약 7일간 보수재 경화를 관찰합니다. 균열에 남은 보수재의 색과 위치는 유지하지만, 강도·접착력·완전 경화 여부는 애니메이션만으로 판정하지 않습니다.','2차 경화 · 약 7일'],
+ cure1:['② 1차 양생 · 1~7일','관과 균열이 있는 시험체를 야외에서 날짜별로 양생합니다. 날짜별 기온·습도·강수 기록을 확인할 수 있습니다.','1차 양생'],
+ inject:['③ 자동 주사기 주입 · 실험 시간','자동 주사기 펌프가 피스톤을 일정 속도로 밀어 보수재를 연속 주입합니다. 보수재 선단이 도달한 토출구부터 균열이 채워집니다.','자동 주입'],
+ cure2:['④ 2차 경화 관찰 · 1~7일','보수재 주입 후 1~7일의 경과를 보여줍니다. 균열 내부 보수재의 표면 표시가 날짜에 따라 변화합니다.','2차 경화'],
  compare:['⑤ 실제값 대조','동일 주입량 조건에서 PTFE/PVC의 첫 토출 시간·출구 도달 시간·배출량·관 잔류량을 실제 측정하고 가상 예측값과 비교합니다.','실험 결과 비교']
 };
 function setPhase(phase){
@@ -55,9 +105,11 @@ function setPhase(phase){
  document.querySelectorAll('[data-phase]').forEach(el=>el.classList.toggle('active',el.dataset.phase===phase));
  const data=phaseData[phase];$('workflowNote').textContent=data[0]+' — '+data[1];
  $('phaseCard').innerHTML='<strong>'+data[0]+'</strong><div id="phaseDetails">'+data[1]+'</div>';
- if(phase==='inject'){progress=0}else if(phase==='mold'||phase==='cure1')progress=0;else progress=predict(current).final;
- $('play').disabled=phase!=='inject';$('timeline').disabled=phase!=='inject';
- draw();
+ if(phase==='inject'){progress=0;playing=true;loopLast=performance.now()}else if(phase==='mold'||phase==='cure1')progress=0;else progress=predict(current).final;
+ dayNumber=1;phasePlayback=false;
+ $('play').disabled=phase==='mold'||phase==='compare';$('timeline').disabled=phase!=='inject';
+ $('play').textContent=phase==='cure1'||phase==='cure2'?'▶ 7일 재생':'▶ 자동 주입 재생';
+ draw();renderDay();
 }
 
 const fmt=(x,n=2)=>Number(x).toFixed(n);
@@ -81,12 +133,19 @@ function setupSvg(){
  for(let i=0;i<ports.length;i++){
   let p=ports[i],sign=p.side,baseY=sign<0?225:255,tipY=sign<0?124:357;
   const x=p.x;
-  const d=`M ${x} ${baseY} Q ${x-14} ${(baseY+tipY)/2} ${x-28} ${tipY} M ${x-12} ${(baseY+tipY)/2+sign*12} L ${x+38} ${tipY+sign*14} M ${x-22} ${tipY+sign*14} L ${x-53} ${tipY-sign*3}`;
+  const splitY=(baseY+tipY)/2;
+  const d=`M ${x} ${baseY} Q ${x-14} ${splitY} ${x-28} ${tipY} M ${x-12} ${splitY+sign*12} L ${x+38} ${tipY+sign*14} M ${x-22} ${tipY+sign*14} L ${x-53} ${tipY-sign*3}`;
   bg+=`<path d="${d}" fill="none" stroke="#444747" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity=".78"/>`;
-  ff+=`<path id="cr${i}" d="${d}" fill="none" stroke="url(#liquid)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 300" opacity=".94"/>`;
-  mm+=`<rect x="${x-8}" y="${sign<0?219:250}" width="16" height="9" rx="3" fill="#587485" stroke="#94b2c0" stroke-width="1.6"/><path d="M ${x} ${sign<0?221:259}v${sign*7}" stroke="#b9a183" stroke-width="3"/>`;
+  const trunk=`M ${x} ${baseY} Q ${x-14} ${splitY} ${x-28} ${tipY}`;
+  const branch1=`M ${x-12} ${splitY+sign*12} L ${x+38} ${tipY+sign*14}`;
+  const branch2=`M ${x-22} ${tipY+sign*14} L ${x-53} ${tipY-sign*3}`;
+  ff+=[trunk,branch1,branch2].map((path,k)=>`<path id="cr${i}_${k}" d="${path}" fill="none" stroke="url(#liquid)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="0 1000" opacity="0"/>`).join('');
+  mm+=`<rect id="valve${i}" x="${x-8}" y="${sign<0?219:250}" width="16" height="9" rx="3" fill="#587485" stroke="#94b2c0" stroke-width="1.6"/><path d="M ${x} ${sign<0?221:259}v${sign*7}" stroke="#b9a183" stroke-width="3"/>`;
  }
  back.innerHTML=bg;fill.innerHTML=ff;marks.innerHTML=mm;
+ for(let i=0;i<ports.length;i++)for(let k=0;k<3;k++){const el=$(`cr${i}_${k}`);if(el&&el.getTotalLength)el.setAttribute('data-length',String(Math.ceil(el.getTotalLength())+5));}
+ // Colored resin gloss during second curing, but only after injection.
+ $('resinOverlays').innerHTML=Array.from({length:6},(_,i)=>`<circle cx="${ports[i].x+(i%2?22:-22)}" cy="${i%2?344:142}" r="4.5" fill="#7bddec" opacity=".7"/>`).join('');
 }
 function setMaterial(mat){current=mat;document.querySelectorAll('[data-mat]').forEach(b=>b.classList.toggle('active',b.dataset.mat===mat));progress=0;playing=false;draw()}
 function errorRow(name,pred,real,unit){if(!Number.isFinite(real))return '';const abs=real-pred;const percent=real!==0?Math.abs(abs)/Math.abs(real)*100:null;return `<tr><td>${name}</td><td>${fmt(real)} ${unit}</td><td>${fmt(pred)} ${unit}</td><td>${percent===null?'계산불가':fmt(percent,1)+'%'}</td></tr>`}
@@ -96,24 +155,31 @@ function draw(){const m=predict(current),mat=materials[current],t=progress,frac=
  $('tubeVol').textContent=fmt(m.tubeVolume)+' mL';$('firstTime').textContent=fmt(m.first,1)+'초';$('outTime').textContent=fmt(m.arrive,1)+'초';
  $('injStat').textContent=fmt(m.volume)+' mL';$('crackStat').textContent=fmt(m.crack)+' mL';$('outStat').textContent=fmt(m.outlet)+' mL';$('resStat').textContent=fmt(m.residual)+' mL';
  $('barCrack').style.width=100*m.crack/m.volume+'%';$('barOut').style.width=100*m.outlet/m.volume+'%';$('barResid').style.width=100*m.residual/m.volume+'%';
- $('massCaption').textContent=`균열 ${fmt(100*m.crack/m.volume,1)}% · 출구 ${fmt(100*m.outlet/m.volume,1)}% · 잔류 ${fmt(100*m.residual/m.volume,1)}% = 100% (가정 기반 예측)`;
+ $('massCaption').textContent=`균열 ${fmt(100*m.crack/m.volume,1)}% · 출구 ${fmt(100*m.outlet/m.volume,1)}% · 잔류 ${fmt(100*m.residual/m.volume,1)}% = 100% (예측값)`;
  const a=predict('ptfe'),b=predict('pvc');
  const compare=[['내부 용적 (mL)',a.tubeVolume,b.tubeVolume],['첫 측면 토출 (초)',a.first,b.first],['출구 도달 (초)',a.arrive,b.arrive],['균열 유입량 (mL)',a.crack,b.crack],['출구 배출량 (mL)',a.outlet,b.outlet],['관 내부 잔류량 (mL)',a.residual,b.residual]];
  $('comparison').innerHTML=compare.map(x=>`<tr><td>${x[0]}</td><td>${fmt(x[1])}</td><td>${fmt(x[2])}</td></tr>`).join('');
  $('timeline').max=m.final;$('timeline').value=t;$('clock').textContent=fmt(t,1)+' / '+fmt(m.final,1)+'초';
- const liquidFront=(t<=0?50:t<=m.first
+ const injectionBegun=experimentPhase==='inject'||experimentPhase==='cure2'||experimentPhase==='compare';
+ const liquidFront= !injectionBegun||t<=0?50:t<=m.first
    ?50+195*Math.min(1,t/Math.max(.001,m.first))
-   :245+545*Math.min(1,(t-m.first)/Math.max(.001,m.arrive-m.first)));
- const visible=t>0?Math.min(740,liquidFront-50):0;
- $('fillBody').setAttribute('width',fmt(visible));$('meniscus').setAttribute('d',visible>0?`M ${liquidFront-2} 234 q 9 6 0 11`:``);
- // Each crack fills gradually AFTER its corresponding port becomes wetted.
+   :245+545*Math.min(1,(t-m.first)/Math.max(.001,m.arrive-m.first));
+ const visible=injectionBegun&&t>0?Math.max(0,Math.min(740,liquidFront-50)):0;
+ // The same moving liquid front controls tube fill, valves AND branch fill.
+ $('fillBody').setAttribute('width',fmt(visible));$('meniscus').setAttribute('d',visible>0&&visible<740?`M ${liquidFront-2} 234 q 9 6 0 11`:``);
  for(let i=0;i<ports.length;i++){
-   const port=ports[i];
-   const arrival=port.x<=245?m.first*(port.x-50)/195:m.first+(port.x-245)/545*(m.arrive-m.first);
-   const completion=liquidFront+0.001>=port.x?Math.max(0,Math.min(1,(t-arrival)/Math.max(6,m.duration*.20))):0;
-   const path=$('cr'+i);
-   path.setAttribute('stroke-dasharray',`${300*completion} 300`);
-   path.setAttribute('opacity',completion>0?'.94':'0');
+   const port=ports[i],arrival=port.x<=245?m.first*(port.x-50)/195:m.first+(port.x-245)/545*(m.arrive-m.first);
+   const arrived=injectionBegun && liquidFront>=port.x && t>=arrival;
+   const completion=arrived?Math.max(0,Math.min(1,(t-arrival)/Math.max(6,m.duration*.20))):0;
+   // Branches do not start coloring until the fluid has traveled up the trunk.
+   for(let k=0;k<3;k++){
+      const path=$(`cr${i}_${k}`);
+      const pathLength=Number(path.getAttribute('data-length'))||140;
+      const local=k===0?Math.min(1,completion/.72):k===1?Math.max(0,Math.min(1,(completion-.40)/.60)):Math.max(0,Math.min(1,(completion-.72)/.28));
+      path.setAttribute('stroke-dasharray',`${pathLength*local} ${pathLength}`);
+      path.setAttribute('opacity',local>0?'.94':'0');
+   }
+   const valve=$('valve'+i);if(valve){valve.setAttribute('fill',arrived?'#83d9ec':'#587485');valve.setAttribute('width',arrived?'7':'16');valve.setAttribute('x',String(port.x-(arrived?3.5:8)));}
  }
  $('frontReadout').textContent=t<=0?'보수재 선단: 주입구 대기':
      (liquidFront<790?'관 내 이동: '+Math.round((liquidFront-50)/740*100)+'% 위치':'관 말단 OUTLET 도달');
@@ -122,6 +188,8 @@ function draw(){const m=predict(current),mat=materials[current],t=progress,frac=
  const fillRatio=hasOutlet?Math.max(0,Math.min(1,(t-m.arrive)/Math.max(5,m.final-m.arrive))):0;
  $('vesselFill').setAttribute('y',fmt(335-66*fillRatio));$('vesselFill').setAttribute('height',fmt(66*fillRatio));
  $('plunger').setAttribute('x1',fmt(-2+Math.min(1,t/m.duration)*12));
+ $('pumpMotor').setAttribute('opacity',experimentPhase==='inject'?'0.95':'0.6');
+ $('pumpLight').setAttribute('fill',experimentPhase==='inject' && t>0 && t<m.duration?'#56e1b2':'#8296a5');
  if(experimentPhase!=='inject'){
   $('frontReadout').textContent=phaseData[experimentPhase][2];
   $('outletReadout').textContent=experimentPhase==='mold'||experimentPhase==='cure1'?'주입 전':'주입 실험 완료';
@@ -131,21 +199,35 @@ function draw(){const m=predict(current),mat=materials[current],t=progress,frac=
 
  // Liquid-colored pipe by position; after cutoff the depiction is no longer a CFD claim.
  if(t>=m.final){$('phase').textContent='가상 예측 완료';$('stageDesc').textContent='실험 종료 후 30초간 배출·잔류 관찰을 가정했습니다. PTFE와 PVC의 이동 시간, 균열 유입량, 출구 배출량 및 관 잔류량을 비교하고 실제 측정값을 입력해 오차를 확인하세요.'}
- else if(t<m.first){$('phase').textContent='① 관 내부 이동';$('stageDesc').textContent='주사기에서 보수재를 연속 주입합니다. 관 내부 기하학적 용적을 고려한 가상 유체 선단이 토출구 쪽으로 이동합니다.'}
+ else if(t<m.first){$('phase').textContent='① 관 내부 이동';$('stageDesc').textContent='주사기 펌프가 자동으로 보수재를 연속 주입합니다. 관 내부 기하학적 용적을 고려한 가상 유체 선단이 토출구 쪽으로 이동합니다.'}
  else if(t<m.arrive){$('phase').textContent='② 균열 방향 토출';$('stageDesc').textContent='보수재가 측면 토출구에 도착한 순서대로 양쪽 분기형 균열로 퍼지는 모습을 표현합니다. 균열별 부피는 측정되지 않아 가상의 동일 분배를 적용합니다.'}
  else if(t<m.duration){$('phase').textContent='③ 관 출구 도달';$('stageDesc').textContent='보수재가 관 말단 OUTLET에 도달한 것으로 가정합니다. 이후 일부는 균열로, 일부는 출구로 전달됩니다. 결과량은 모델 계수에 따른 예측값입니다.'}
- else{$('phase').textContent='④ 주입 종료 · 배출 관찰';$('stageDesc').textContent='주사기 주입이 종료됐습니다. 주입 후 30초의 배출 관찰 시간을 설정했습니다. 최종 배출량·잔류량은 실제 실험에서 용기와 주사기를 이용해 측정해야 합니다.'}
+ else{$('phase').textContent='④ 주입 종료 · 배출 관찰';$('stageDesc').textContent='자동 주사기 펌프의 주입이 종료됐습니다. 주입 후 30초의 배출 관찰 시간을 설정했습니다. 최종 배출량·잔류량은 실제 실험에서 용기와 주사기를 이용해 측정해야 합니다.'}
  if(experimentPhase!=='inject'){
  $('phase').textContent=phaseData[experimentPhase][0];
  $('stageDesc').textContent=phaseData[experimentPhase][1];
 } 
-$('play').textContent=playing?'Ⅱ 일시정지':'▶ 가상 실험 시작';renderErrors();}
+$('play').textContent=playing?'Ⅱ 일시정지':(experimentPhase==='cure1'||experimentPhase==='cure2'?'▶ 7일 재생':'▶ 자동 주입 재생');
+ if(experimentPhase==='cure1'||experimentPhase==='cure2'){
+  $('phase').textContent=(experimentPhase==='cure1'?'1차 양생':'2차 경화')+` · ${dayNumber}일차`;
+  $('stageDesc').textContent=phaseData[experimentPhase][1];
+ }
+ renderErrors();}
  function loadFields(){const r=actual[current];for(const [field,id] of [['first','actualFirst'],['arrive','actualOutlet'],['crack','actualCrack'],['outlet','actualOut'],['residual','actualResid'],['duration','actualDuration']])$(id).value=r[field]??'';}
  function saveFields(){const r=actual[current];for(const [field,id] of [['first','actualFirst'],['arrive','actualOutlet'],['crack','actualCrack'],['outlet','actualOut'],['residual','actualResid'],['duration','actualDuration']]){const s=$(id).value.trim();if(!s)delete r[field];else if(Number(s)>=0&&Number.isFinite(Number(s)))r[field]=Number(s)}renderErrors()}
  document.querySelectorAll('[data-mat]').forEach(b=>b.addEventListener('click',()=>{saveFields();setMaterial(b.dataset.mat);loadFields();draw()}));
  for(const id of ['volume','duration'])$(id).addEventListener('input',()=>{progress=0;playing=false;draw()});
  document.querySelectorAll('[data-phase]').forEach(el=>el.addEventListener('click',()=>setPhase(el.dataset.phase)));
-$('play').addEventListener('click',()=>{if(experimentPhase!=='inject')return;if(progress>=predict(current).final)progress=0;playing=!playing;draw()});
+$('play').addEventListener('click',()=>{if(experimentPhase==='cure1'||experimentPhase==='cure2'){
+  if(dayNumber>=7&& !playing)dayNumber=1;
+  playing=!playing;phasePlayback=playing;lastDayAdvance=performance.now();renderDay();draw();return;
+ }if(experimentPhase!=='inject')return;if(progress>=predict(current).final)progress=0;playing=!playing;draw()});
+ $('prevDay').addEventListener('click',()=>{playing=false;dayNumber=Math.max(1,dayNumber-1);renderDay();draw()});
+ $('nextDay').addEventListener('click',()=>{playing=false;dayNumber=Math.min(7,dayNumber+1);renderDay();draw()});
+ $('daySlider').addEventListener('input',e=>{playing=false;dayNumber=Number(e.target.value);renderDay();draw()});
+ $('fetchWeather').addEventListener('click',fetchWeather);
+ $('siteCity').addEventListener('change',()=>{$('coordinates').style.display=$('siteCity').value==='custom'?'grid':'none';weatherList=[];renderDay()});
+ $('startDate').addEventListener('change',()=>{weatherList=[];renderDay()});
  $('reset').addEventListener('click',()=>{playing=false;progress=0;draw()});
  $('timeline').addEventListener('input',e=>{playing=false;progress=Number(e.target.value);draw()});
  for(const id of ['actualFirst','actualOutlet','actualCrack','actualOut','actualResid','actualDuration'])$(id).addEventListener('input',saveFields);
@@ -153,7 +235,11 @@ $('play').addEventListener('click',()=>{if(experimentPhase!=='inject')return;if(
  $('exportCSV').addEventListener('click',()=>{saveFields();const headers=['관','내경(mm)','외경(mm)','길이(mm)','주입량(mL)','설정 주입시간(s)','예측 첫 토출(s)','실측 첫 토출(s)','예측 출구 도달(s)','실측 출구 도달(s)','예측 균열 유입(mL)','실측 균열 유입(mL)','예측 출구 배출(mL)','실측 출구 배출(mL)','예측 관 잔류(mL)','실측 관 잔류(mL)','주입 실제 시간(s)','결과 구분'];let rows=[headers];for(const key of ['ptfe','pvc']){const m=predict(key),a=actual[key],mat=materials[key];rows.push([mat.label,mat.id,mat.od,200,m.volume,m.duration,fmt(m.first),a.first??'',fmt(m.arrive),a.arrive??'',fmt(m.crack),a.crack??'',fmt(m.outlet),a.outlet??'',fmt(m.residual),a.residual??'',a.duration??'','예측값은 미검증 가정 기반'])}const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='smart_concrete_ptfe_pvc_comparison.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});
  $('tabExperiment').addEventListener('click',()=>{$('experimental').classList.remove('disabled');$('system').classList.add('disabled');$('tabExperiment').classList.add('active');$('tabSystem').classList.remove('active')});
  $('tabSystem').addEventListener('click',()=>{$('experimental').classList.add('disabled');$('system').classList.remove('disabled');$('tabSystem').classList.add('active');$('tabExperiment').classList.remove('active');playing=false});
- function tick(ts){if(playing){const dt=Math.min(100,ts-(loopLast||ts));progress=Math.min(predict(current).final,progress+dt/1000*4);if(progress>=predict(current).final)playing=false;draw()}loopLast=ts;requestAnimationFrame(tick)}
+ let lastDayAdvance=0;
+ function tick(ts){if(playing){if(experimentPhase==='cure1'||experimentPhase==='cure2'){
+   if(ts-lastDayAdvance>=820){dayNumber=Math.min(7,dayNumber+1);lastDayAdvance=ts;if(dayNumber>=7)playing=false;renderDay();draw();}
+ }else{const dt=Math.min(100,ts-(loopLast||ts));progress=Math.min(predict(current).final,progress+dt/1000*4);if(progress>=predict(current).final)playing=false;draw();}}
+ loopLast=ts;requestAnimationFrame(tick)}
  setupSvg();loadFields();setPhase('mold');requestAnimationFrame(tick);
 })();
 </script></body></html>
